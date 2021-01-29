@@ -1,6 +1,6 @@
 package models;
 
-import models.utils.AddCardUtils;
+import utils.AddCardUtils;
 
 import java.util.HashSet;
 import java.util.Set;

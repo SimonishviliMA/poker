@@ -1,4 +1,4 @@
-package models.utils;
+package utils;
 
 import models.Card;
 
@@ -7,18 +7,9 @@ import java.util.Set;
 
 public class AddCardUtils {
 
-    private static AddCardUtils instance;
     private static final Set<Card> usedCards = new HashSet<>();
 
     private AddCardUtils() {
-    }
-
-    public static void getInstance(){
-        if (instance == null) {
-
-            instance = new AddCardUtils();
-        }
-
     }
 
     public static Card getCards() {
