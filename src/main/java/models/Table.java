@@ -2,12 +2,14 @@ package models;
 
 import utils.AddCardUtils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Table {
 
-    private final Set<Card> cards = new HashSet<>();
+    private final List<Card> cards = new ArrayList<>();
 
     public Table() {
         cards.add(AddCardUtils.getCards());
@@ -19,7 +21,7 @@ public class Table {
         cards.add(AddCardUtils.getCards());
     }
 
-    public Set<Card> getCards() {
+    public List<Card> getCards() {
         return cards;
     }
 
