@@ -15,14 +15,23 @@ public enum CombinationEnum {
 
     private final int value;
     private final String name;
+    private ValueCardEnum valueCard;
 
     CombinationEnum(int value, String name) {
         this.value = value;
         this.name = name;
     }
 
+    public void setValueCard(ValueCardEnum valueCard) {
+        this.valueCard = valueCard;
+    }
+
     public int getValue() {
         return value;
+    }
+
+    public ValueCardEnum getValueCard() {
+        return valueCard;
     }
 
     public String getName() {

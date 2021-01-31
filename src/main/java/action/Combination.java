@@ -2,6 +2,8 @@ package action;
 
 import models.Card;
 import models.cardEnum.CombinationEnum;
+import models.cardEnum.SuitCardEnum;
+import models.cardEnum.ValueCardEnum;
 
 import java.util.*;
 
@@ -17,133 +19,218 @@ public class Combination {
     private boolean onePairs;
 
     public CombinationEnum getCombination(List<Card> cards) {
-        if (getRoyalFlush(cards)) return CombinationEnum.ROYAL_FLUSH;
-        if (getStraightFlush(cards)) return CombinationEnum.STRAIGHT_FLUSH;
-        if (getFourOfAKind(cards)) return CombinationEnum.FOUR_OF_A_KIND;
-        if (getFullHouse(cards)) return CombinationEnum.FULL_HOUSE;
-        if (getFlush(cards)) return CombinationEnum.FLUSH;
-        if (getStraight(cards)) return CombinationEnum.STRAIGHT;
-        if (getThreeOfAKind(cards)) return CombinationEnum.THREE_OF_A_KIND;
-        if (getTwoPairs(cards)) return CombinationEnum.TWO_PAIRS;
-        if (getOnePairs(cards)) return CombinationEnum.ONE_PAIR;
-        return getHighCard(cards);
+
+        ValueCardEnum highCardByCombination = getRoyalFlush(cards);
+        if (highCardByCombination != null) {
+            CombinationEnum royalFlush = CombinationEnum.ROYAL_FLUSH;
+            royalFlush.setValueCard(highCardByCombination);
+            return royalFlush;
+        }
+
+        highCardByCombination = getStraightFlush(cards);
+        if (highCardByCombination != null) {
+            CombinationEnum straightFlush = CombinationEnum.STRAIGHT_FLUSH;
+            straightFlush.setValueCard(highCardByCombination);
+            return straightFlush;
+        }
+
+        highCardByCombination = getFourOfAKind(cards);
+        if (highCardByCombination != null) {
+            CombinationEnum fourOfAKind = CombinationEnum.FOUR_OF_A_KIND;
+            fourOfAKind.setValueCard(highCardByCombination);
+            return fourOfAKind;
+        }
+
+        highCardByCombination = getFullHouse(cards);
+        if (highCardByCombination != null) {
+            CombinationEnum fullHouse = CombinationEnum.FULL_HOUSE;
+            fullHouse.setValueCard(highCardByCombination);
+            return fullHouse;
+        }
+
+        highCardByCombination = getFlush(cards);
+        if (highCardByCombination != null) {
+            CombinationEnum flush = CombinationEnum.FLUSH;
+            flush.setValueCard(highCardByCombination);
+            return flush;
+        }
+
+        highCardByCombination = getStraight(cards);
+        if (highCardByCombination != null) {
+            CombinationEnum straight = CombinationEnum.STRAIGHT;
+            straight.setValueCard(highCardByCombination);
+            return straight;
+        }
+
+        highCardByCombination = getThreeOfAKind(cards);
+        if (highCardByCombination != null) {
+            CombinationEnum threeOfAKind = CombinationEnum.THREE_OF_A_KIND;
+            threeOfAKind.setValueCard(highCardByCombination);
+            return threeOfAKind;
+        }
+
+        highCardByCombination = getTwoPairs(cards);
+        if (highCardByCombination != null) {
+            CombinationEnum twoPairs = CombinationEnum.TWO_PAIRS;
+            twoPairs.setValueCard(highCardByCombination);
+            return twoPairs;
+        }
+
+        highCardByCombination = getOnePairs(cards);
+        if (highCardByCombination != null) {
+            CombinationEnum onePair = CombinationEnum.ONE_PAIR;
+            onePair.setValueCard(highCardByCombination);
+            return onePair;
+        }
+
+        highCardByCombination = getHighCard(cards);
+        CombinationEnum highCard = CombinationEnum.HIGH_CARD;
+        highCard.setValueCard(highCardByCombination);
+        return highCard;
+
     }
 
-    private boolean getRoyalFlush(List<Card> cards) {
+    private ValueCardEnum getRoyalFlush(List<Card> cards) {
         //TODO добавить проверку на старшую карту
         return getStraightFlush(cards);
     }
 
-    private boolean getStraightFlush(List<Card> cards) {
-        if (straightFlush) return true;
-        if (getStraight(cards) && getFlush(cards)) {
-            straightFlush = true;
+    private ValueCardEnum getStraightFlush(List<Card> cards) {
+        ValueCardEnum straight = getStraight(cards);
+        ValueCardEnum flush = getFlush(cards);
+        if (straight != null && flush != null) {
+            return straight;
         }
-        return straightFlush;
+        return null;
     }
 
-    private boolean getFourOfAKind(List<Card> cards) {
-        if (fourOfAKind) return true;
-        Map<Integer, Integer> quantity = getQuantity(cards);
-        for (int x : quantity.keySet()) {
-            if (quantity.get(x) == 4) {
-                fourOfAKind = true;
+    private ValueCardEnum getFourOfAKind(List<Card> cards) {
+        Map<ValueCardEnum, Integer> quantity = getQuantity(cards);
+        for (Map.Entry<ValueCardEnum, Integer> x : quantity.entrySet()) {
+            if (x.getValue() == 4) {
+                return x.getKey();
             }
         }
-        return fourOfAKind;
+        return null;
     }
 
-    private boolean getFullHouse(List<Card> cards) {
-        if (fullHouse) return true;
-        Map<Integer, Integer> quantity = getQuantity(cards);
-        boolean flagThree = false;
-        boolean flagTwo = false;
-        for (int x : quantity.keySet()) {
+    private ValueCardEnum getFullHouse(List<Card> cards) {
+        Map<ValueCardEnum, Integer> quantity = getQuantity(cards);
+        ValueCardEnum threeOfAKind = null;
+        ValueCardEnum twoPairs = null;
+        for (Map.Entry<ValueCardEnum, Integer> x : quantity.entrySet()) {
 
-            if (quantity.get(x) == 3) {
-                flagThree = true;
+            if (x.getValue() == 3) {
+                threeOfAKind = x.getKey();
+
             }
-            if (quantity.get(x) == 2) {
-                flagTwo = true;
+            if (x.getValue() == 2) {
+                twoPairs = x.getKey();
             }
         }
 
-        if (flagThree && flagTwo) {
-            fullHouse = true;
+        if (threeOfAKind != null && twoPairs != null) {
+            return max(threeOfAKind, twoPairs);
         }
 
-        return fullHouse;
+        return null;
     }
 
-    private boolean getFlush(List<Card> cards) {
-        if (flush) return true;
-        Map<Integer, Integer> quantity = new HashMap<>();
+    private ValueCardEnum getFlush(List<Card> cards) {
+        Map<SuitCardEnum, Integer> quantity = new HashMap<>();
         for (Card card : cards) {
-            int value = card.getSuitCard().getValue();
+            SuitCardEnum value = card.getSuitCard();
             if (quantity.containsKey(value)) {
                 quantity.put(value, quantity.get(value) + 1);
             } else {
                 quantity.put(value, 1);
             }
         }
-        for (int x : quantity.keySet()) {
 
-            if (quantity.get(x) == 5) {
-                flush = true;
+        SuitCardEnum suitCardEnum = null;
+        for (Map.Entry<SuitCardEnum, Integer> x : quantity.entrySet()) {
+
+            if (x.getValue().equals(5)) {
+                suitCardEnum = x.getKey();
+                break;
             }
         }
-        return flush;
+
+        if (suitCardEnum != null) {
+            ValueCardEnum maxValue = ValueCardEnum.TWO;
+            for (Card card : cards) {
+                if (card.getSuitCard().getValue() == suitCardEnum.getValue() &&
+                        maxValue.getValue() < card.getValueCard().getValue()) {
+
+                    maxValue = card.getValueCard();
+                }
+            }
+            return maxValue;
+        }
+        return null;
     }
 
-    private boolean getStraight(List<Card> cards) {
-        return false;
+    private ValueCardEnum getStraight(List<Card> cards) {
+        return null;
     }
 
-    private boolean getThreeOfAKind(List<Card> cards) {
-        if (threeOfAKind) return true;
-        Map<Integer, Integer> quantity = getQuantity(cards);
-        for (int x : quantity.keySet()) {
-            if (quantity.get(x) == 3) {
-                threeOfAKind = true;
+    private ValueCardEnum getThreeOfAKind(List<Card> cards) {
+        Map<ValueCardEnum, Integer> quantity = getQuantity(cards);
+        for (Map.Entry<ValueCardEnum, Integer> x : quantity.entrySet()) {
+            if (x.getValue() == 3) {
+                return x.getKey();
             }
         }
-        return threeOfAKind;
+        return null;
     }
 
-    private boolean getTwoPairs(List<Card> cards) {
-        if (twoPairs) return true;
-        Map<Integer, Integer> quantity = getQuantity(cards);
+    private ValueCardEnum getTwoPairs(List<Card> cards) {
+        Map<ValueCardEnum, Integer> quantity = getQuantity(cards);
         int count = 0;
-        for (int x : quantity.keySet()) {
-            if (quantity.get(x) == 2) {
+        ValueCardEnum firstPair = null;
+        ValueCardEnum secondPair = null;
+        for (Map.Entry<ValueCardEnum, Integer> x : quantity.entrySet()) {
+            if (x.getValue() == 2) {
                 count++;
+                if (count == 1) {
+                    firstPair = x.getKey();
+                }
+                if (count == 2) {
+                    secondPair = x.getKey();
+                }
             }
         }
-        if (count == 2) {
-            twoPairs = true;
+        if (firstPair != null && secondPair != null) {
+            return max(firstPair, secondPair);
         }
-        return twoPairs;
+        return null;
     }
 
-    private boolean getOnePairs(List<Card> cards) {
-        if (onePairs) return true;
-        Map<Integer, Integer> quantity = getQuantity(cards);
-        for (int x : quantity.keySet()) {
-            if (quantity.get(x) == 2) {
-                onePairs = true;
+    private ValueCardEnum getOnePairs(List<Card> cards) {
+        Map<ValueCardEnum, Integer> quantity = getQuantity(cards);
+        for (Map.Entry<ValueCardEnum, Integer> x : quantity.entrySet()) {
+            if (x.getValue() == 2) {
+                return x.getKey();
             }
         }
-        return onePairs;
+        return null;
     }
 
-    private CombinationEnum getHighCard(List<Card> cards) {
-        return CombinationEnum.HIGH_CARD;
-    }
-
-    private Map<Integer, Integer> getQuantity(List<Card> cards) {
-        Map<Integer, Integer> quantity = new HashMap<>();
+    private ValueCardEnum getHighCard(List<Card> cards) {
+        ValueCardEnum maxValue = ValueCardEnum.TWO;
         for (Card card : cards) {
-            int value = card.getValueCard().getValue();
+            if (card.getValueCard().getValue() > maxValue.getValue()) {
+                maxValue = card.getValueCard();
+            }
+        }
+        return maxValue;
+    }
+
+    private Map<ValueCardEnum, Integer> getQuantity(List<Card> cards) {
+        Map<ValueCardEnum, Integer> quantity = new HashMap<>();
+        ValueCardEnum value;
+        for (Card card : cards) {
+            value = card.getValueCard();
             if (quantity.containsKey(value)) {
                 quantity.put(value, quantity.get(value) + 1);
             } else {
@@ -152,4 +239,9 @@ public class Combination {
         }
         return quantity;
     }
+
+    private ValueCardEnum max(ValueCardEnum x, ValueCardEnum y) {
+        return x.getValue() > y.getValue() ? x : y;
+    }
+
 }

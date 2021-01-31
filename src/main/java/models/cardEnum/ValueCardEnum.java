@@ -42,4 +42,5 @@ public enum ValueCardEnum {
     public static ValueCardEnum getRandom() {
         return VALUES.get(RANDOM.nextInt(SIZE));
     }
+
 }

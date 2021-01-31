@@ -16,9 +16,11 @@ public class Main {
         System.out.println("\n\n");
         System.out.println(player1.getCards().toString());
         System.out.println(player1.getCombination().getName());
+        System.out.println(player1.getCombination().getValueCard());
         System.out.println("\n\n");
         System.out.println(player2.getCards().toString());
         System.out.println(player2.getCombination().getName());
+        System.out.println(player2.getCombination().getValueCard());
     }
 
 
