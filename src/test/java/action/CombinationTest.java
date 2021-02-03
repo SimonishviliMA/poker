@@ -150,10 +150,32 @@ public class CombinationTest {
         Card card5 = new Card(SuitCardEnum.DIAMONDS, ValueCardEnum.SIX);
         Card card6 = new Card(SuitCardEnum.DIAMONDS, ValueCardEnum.SEVEN);
         Card card7 = new Card(SuitCardEnum.DIAMONDS, ValueCardEnum.EIGHT);
+        List<Card> cards1 = Arrays.asList(card1, card4, card3, card5, card2, card6, card7);
+        Combination combination = new Combination();
+        CombinationEnum result = combination.getCombination(cards1);
+        assertEquals(CombinationEnum.STRAIGHT_FLUSH, result);
+        assertEquals(ValueCardEnum.EIGHT, result.getMaxValueCard());
+
+        Card card8 = new Card(SuitCardEnum.CLUBS, ValueCardEnum.SEVEN);
+        Card card9 = new Card(SuitCardEnum.CLUBS, ValueCardEnum.EIGHT);
+        List<Card> cards2 = Arrays.asList(card3, card4, card5, card8, card9);
+        CombinationEnum wrongResult = combination.getCombination(cards2);
+        assertNotEquals(CombinationEnum.STRAIGHT_FLUSH, wrongResult);
+    }
+
+    @Test
+    public void getCombinationRoyalFlush() {
+        Card card1 = new Card(SuitCardEnum.DIAMONDS, ValueCardEnum.TEN);
+        Card card2 = new Card(SuitCardEnum.DIAMONDS, ValueCardEnum.JACK);
+        Card card3 = new Card(SuitCardEnum.DIAMONDS, ValueCardEnum.QUEEN);
+        Card card4 = new Card(SuitCardEnum.DIAMONDS, ValueCardEnum.KING);
+        Card card5 = new Card(SuitCardEnum.DIAMONDS, ValueCardEnum.ACE);
+        Card card6 = new Card(SuitCardEnum.DIAMONDS, ValueCardEnum.FIVE);
+        Card card7 = new Card(SuitCardEnum.DIAMONDS, ValueCardEnum.SIX);
         List<Card> cards = Arrays.asList(card1, card4, card3, card5, card2, card6, card7);
         Combination combination = new Combination();
         CombinationEnum result = combination.getCombination(cards);
-        assertEquals(CombinationEnum.STRAIGHT_FLUSH, result);
-        assertEquals(ValueCardEnum.EIGHT, result.getMaxValueCard());
+        assertEquals(CombinationEnum.ROYAL_FLUSH, result);
+        assertEquals(ValueCardEnum.ACE, result.getMaxValueCard());
     }
 }

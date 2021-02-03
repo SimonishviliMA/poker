@@ -2,6 +2,7 @@ package models.cardEnum;
 
 import models.Card;
 
+import java.util.Comparator;
 import java.util.List;
 
 public enum CombinationEnum {
@@ -36,6 +37,7 @@ public enum CombinationEnum {
     }
 
     public void setCardsFromCombination(List<Card> cardsFromCombination) {
+        cardsFromCombination.sort(Comparator.comparingInt(x -> x.getValueCard().getValue()));
         this.maxValueCard = cardsFromCombination.get(cardsFromCombination.size() - 1).getValueCard();
         this.cardsFromCombination = cardsFromCombination;
     }
