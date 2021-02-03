@@ -5,9 +5,7 @@ import models.cardEnum.CombinationEnum;
 import utils.AddCardUtils;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Player {
 
@@ -40,8 +38,8 @@ public class Player {
     }
 
     public void setCombination(List<Card> tableCard) {
-        List<Card> cards = new ArrayList<>(getCards());
-        cards.addAll(tableCard);
+        List<Card> cards = new ArrayList<>(tableCard);
+        cards.addAll(getCards());
         Combination combination = new Combination();
         this.combination = combination.getCombination(cards);
     }

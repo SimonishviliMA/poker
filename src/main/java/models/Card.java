@@ -7,12 +7,17 @@ import java.util.Objects;
 
 public class Card {
 
-    private final SuitCardEnum suitCard;
-    private final ValueCardEnum valueCard;
+    private SuitCardEnum suitCard;
+    private ValueCardEnum valueCard;
 
     public Card() {
         this.suitCard = SuitCardEnum.getRandom();
         this.valueCard = ValueCardEnum.getRandom();
+    }
+
+    public Card(SuitCardEnum suitCard, ValueCardEnum valueCard) {
+        this.suitCard = suitCard;
+        this.valueCard = valueCard;
     }
 
     public SuitCardEnum getSuitCard() {

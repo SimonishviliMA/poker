@@ -1,5 +1,10 @@
 package models.cardEnum;
 
+import models.Card;
+
+import java.util.Comparator;
+import java.util.List;
+
 public enum CombinationEnum {
 
     HIGH_CARD(0, "High card"),
@@ -15,23 +20,34 @@ public enum CombinationEnum {
 
     private final int value;
     private final String name;
-    private ValueCardEnum valueCard;
+    private List<Card> cardsFromCombination;
+    private ValueCardEnum maxValueCard;
 
     CombinationEnum(int value, String name) {
         this.value = value;
         this.name = name;
     }
 
-    public void setValueCard(ValueCardEnum valueCard) {
-        this.valueCard = valueCard;
+    public void setMaxValueCard(ValueCardEnum maxValueCard) {
+        this.maxValueCard = maxValueCard;
+    }
+
+    public List<Card> getCardsFromCombination() {
+        return cardsFromCombination;
+    }
+
+    public void setCardsFromCombination(List<Card> cardsFromCombination) {
+        cardsFromCombination.sort(Comparator.comparingInt(x -> x.getValueCard().getValue()));
+        this.maxValueCard = cardsFromCombination.get(cardsFromCombination.size() - 1).getValueCard();
+        this.cardsFromCombination = cardsFromCombination;
     }
 
     public int getValue() {
         return value;
     }
 
-    public ValueCardEnum getValueCard() {
-        return valueCard;
+    public ValueCardEnum getMaxValueCard() {
+        return maxValueCard;
     }
 
     public String getName() {
