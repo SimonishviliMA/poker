@@ -7,10 +7,12 @@ import java.util.Objects;
 
 public class Card {
 
-    private SuitCardEnum suitCard;
-    private ValueCardEnum valueCard;
+    private final SuitCardEnum suitCard;
+    private final ValueCardEnum valueCard;
+    private boolean playerCard;
 
-    public Card() {
+    public Card(boolean playerCard) {
+        this.playerCard = playerCard;
         this.suitCard = SuitCardEnum.getRandom();
         this.valueCard = ValueCardEnum.getRandom();
     }
@@ -26,6 +28,10 @@ public class Card {
 
     public ValueCardEnum getValueCard() {
         return valueCard;
+    }
+
+    public boolean isPlayerCard() {
+        return playerCard;
     }
 
     @Override

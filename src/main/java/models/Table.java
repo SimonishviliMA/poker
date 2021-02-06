@@ -12,13 +12,13 @@ public class Table {
     private final List<Card> cards = new ArrayList<>();
 
     public Table() {
-        cards.add(AddCardUtils.getCards());
-        cards.add(AddCardUtils.getCards());
-        cards.add(AddCardUtils.getCards());
+        cards.add(AddCardUtils.getCards(false));
+        cards.add(AddCardUtils.getCards(false));
+        cards.add(AddCardUtils.getCards(false));
     }
 
     public void addCard(){
-        cards.add(AddCardUtils.getCards());
+        cards.add(AddCardUtils.getCards(false));
     }
 
     public List<Card> getCards() {

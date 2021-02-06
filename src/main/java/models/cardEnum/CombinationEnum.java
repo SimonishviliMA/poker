@@ -2,6 +2,7 @@ package models.cardEnum;
 
 import models.Card;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -21,15 +22,11 @@ public enum CombinationEnum {
     private final int value;
     private final String name;
     private List<Card> cardsFromCombination;
-    private ValueCardEnum maxValueCard;
+    private ValueCardEnum kicker;
 
     CombinationEnum(int value, String name) {
         this.value = value;
         this.name = name;
-    }
-
-    public void setMaxValueCard(ValueCardEnum maxValueCard) {
-        this.maxValueCard = maxValueCard;
     }
 
     public List<Card> getCardsFromCombination() {
@@ -38,7 +35,6 @@ public enum CombinationEnum {
 
     public void setCardsFromCombination(List<Card> cardsFromCombination) {
         cardsFromCombination.sort(Comparator.comparingInt(x -> x.getValueCard().getValue()));
-        this.maxValueCard = cardsFromCombination.get(cardsFromCombination.size() - 1).getValueCard();
         this.cardsFromCombination = cardsFromCombination;
     }
 
@@ -46,11 +42,47 @@ public enum CombinationEnum {
         return value;
     }
 
-    public ValueCardEnum getMaxValueCard() {
-        return maxValueCard;
-    }
-
     public String getName() {
         return name;
+    }
+
+    public ValueCardEnum getKicker() {
+        return kicker;
+    }
+
+    public void setKicker(List<Card> cards, List<Card> cardsFromCombination) {
+        List<Card> otherCard = new ArrayList<>();
+        cards.forEach(x -> {
+            boolean have = false;
+            for (Card card : cardsFromCombination) {
+                if (card.equals(x)) {
+                    have = true;
+                    break;
+                }
+            }
+            if (!have) {
+                otherCard.add(x);
+            }
+        });
+        if (!otherCard.isEmpty()) {
+            otherCard.sort(Comparator.comparingInt(card -> card.getValueCard().getValue()));
+            this.kicker = otherCard.get(otherCard.size() - 1).getValueCard();
+        }
+    }
+
+    public void setKicker(ValueCardEnum kicker) {
+        this.kicker = kicker;
+    }
+
+    public boolean equals(CombinationEnum o){
+        if (o == null) {
+            return false;
+        }
+        if (o == this) {
+            return true;
+        }
+
+        return o.getValue() == this.getValue() &&
+                o.getCardsFromCombination().equals(this.getCardsFromCombination());
     }
 }

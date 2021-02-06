@@ -12,10 +12,10 @@ public class AddCardUtils {
     private AddCardUtils() {
     }
 
-    public static Card getCards() {
-        Card card = new Card();
+    public static Card getCards(boolean playerCard) {
+        Card card = new Card(playerCard);
         while(usedCards.contains(card)) {
-            card = new Card();
+            card = new Card(playerCard);
         }
         usedCards.add(card);
         return card;

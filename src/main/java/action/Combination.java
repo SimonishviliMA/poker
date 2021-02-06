@@ -1,6 +1,7 @@
 package action;
 
 import models.Card;
+import models.Player;
 import models.cardEnum.CombinationEnum;
 import models.cardEnum.SuitCardEnum;
 import models.cardEnum.ValueCardEnum;
@@ -12,100 +13,128 @@ public class Combination {
 
     public CombinationEnum getCombination(List<Card> cards) {
 
-        List<Card> cardsCombination = getRoyalFlush(cards);
-        if (!cardsCombination.isEmpty()) {
-            CombinationEnum royalFlush = CombinationEnum.ROYAL_FLUSH;
-            royalFlush.setCardsFromCombination(cardsCombination);
-            return royalFlush;
+        CombinationEnum combination = getRoyalFlush(cards);
+        if (combination != null) {
+            return combination;
         }
 
-        cardsCombination = getStraightFlush(cards);
-        if (!cardsCombination.isEmpty()) {
-            CombinationEnum straightFlush = CombinationEnum.STRAIGHT_FLUSH;
-            straightFlush.setCardsFromCombination(cardsCombination);
-            return straightFlush;
+        combination = getStraightFlush(cards);
+        if (combination != null) {
+            return combination;
         }
 
-        cardsCombination = getFourOfAKind(cards);
-        if (!cardsCombination.isEmpty()) {
-            CombinationEnum fourOfAKind = CombinationEnum.FOUR_OF_A_KIND;
-            fourOfAKind.setCardsFromCombination(cardsCombination);
-            return fourOfAKind;
+        combination = getFourOfAKind(cards);
+        if (combination != null) {
+            return combination;
         }
 
-        cardsCombination = getFullHouse(cards);
-        if (!cardsCombination.isEmpty()) {
-            CombinationEnum fullHouse = CombinationEnum.FULL_HOUSE;
-            fullHouse.setCardsFromCombination(cardsCombination);
-            return fullHouse;
+        combination = getFullHouse(cards);
+        if (combination != null) {
+            return combination;
         }
 
-        cardsCombination = getFlush(cards);
-        if (!cardsCombination.isEmpty()) {
-            CombinationEnum flush = CombinationEnum.FLUSH;
-            flush.setCardsFromCombination(cardsCombination);
-            return flush;
+        combination = getFlush(cards);
+        if (combination != null) {
+            return combination;
         }
 
-        cardsCombination = getStraight(cards);
-        if (!cardsCombination.isEmpty()) {
-            CombinationEnum straight = CombinationEnum.STRAIGHT;
-            straight.setCardsFromCombination(cardsCombination);
-            return straight;
+        combination = getStraight(cards);
+        if (combination != null) {
+            return combination;
         }
 
-        cardsCombination = getThreeOfAKind(cards);
-        if (!cardsCombination.isEmpty()) {
-            CombinationEnum threeOfAKind = CombinationEnum.THREE_OF_A_KIND;
-            threeOfAKind.setCardsFromCombination(cardsCombination);
-            return threeOfAKind;
+        combination = getThreeOfAKind(cards);
+        if (combination != null) {
+            return combination;
         }
 
-        cardsCombination = getTwoPairs(cards);
-        if (!cardsCombination.isEmpty()) {
-            CombinationEnum twoPairs = CombinationEnum.TWO_PAIRS;
-            twoPairs.setCardsFromCombination(cardsCombination);
-            return twoPairs;
+        combination = getTwoPairs(cards);
+        if (combination != null) {
+            return combination;
         }
 
-        cardsCombination = getOnePairs(cards);
-        if (!cardsCombination.isEmpty()) {
-            CombinationEnum onePair = CombinationEnum.ONE_PAIR;
-            onePair.setCardsFromCombination(cardsCombination);
-            return onePair;
+        combination = getOnePairs(cards);
+        if (combination != null) {
+            return combination;
         }
 
-        CombinationEnum highCard = CombinationEnum.HIGH_CARD;
-        highCard.setMaxValueCard(getHighCard(cards).getValueCard());
-        return highCard;
+        Card highCard = getHighCard(cards);
+        combination = CombinationEnum.HIGH_CARD;
+        combination.setCardsFromCombination(new ArrayList<>(List.of(highCard)));
+        combination.setKicker(highCard.getValueCard());
+        return combination;
 
     }
 
-    private List<Card> getRoyalFlush(List<Card> cards) {
-        List<Card> straightFlush = getStraightFlush(cards);
-        return !straightFlush.isEmpty() &&
-                straightFlush.get(straightFlush.size() - 1).getValueCard().equals(ValueCardEnum.ACE) ?
-                straightFlush : new ArrayList<>();
+    private CombinationEnum getRoyalFlush(List<Card> cards) {
+
+        CombinationEnum betweenCombination = getStraightFlush(cards);
+        if (betweenCombination != null) {
+            List<Card> combinationCards = betweenCombination.getCardsFromCombination();
+            if (combinationCards.get(combinationCards.size() - 1).getValueCard().equals(ValueCardEnum.ACE)) {
+                CombinationEnum combination = CombinationEnum.ROYAL_FLUSH;
+                combination.setCardsFromCombination(combinationCards);
+                combination.setKicker(cards, combinationCards);
+                return combination;
+            }
+        }
+        return null;
     }
 
-    private List<Card> getStraightFlush(List<Card> cards) {
-        List<Card> flush = getFlush(cards);
+    private CombinationEnum getStraightFlush(List<Card> cards) {
 
-        return !flush.isEmpty() ? getStraight(flush) : new ArrayList<>();
+        CombinationEnum betweenCombination = getFlush(cards);
+        if (betweenCombination != null) {
+            List<Card> combinationCards = betweenCombination.getCardsFromCombination();
+            if (!combinationCards.isEmpty()) {
+                betweenCombination = getStraight(combinationCards);
+                if (betweenCombination != null) {
+                    CombinationEnum combination = CombinationEnum.STRAIGHT_FLUSH;
+                    combination.setCardsFromCombination(combinationCards);
+                    combination.setKicker(cards, combinationCards);
+                    return combination;
+                }
+            }
+        }
+        return null;
     }
 
-    private List<Card> getFourOfAKind(List<Card> cards) {
+    private CombinationEnum getFourOfAKind(List<Card> cards) {
+
         Map<ValueCardEnum, Integer> quantity = getQuantity(cards);
-        return getCombinationCards(cards, quantity, 4);
+        List<Card> combinationCards = getCombinationCards(cards, quantity, 4);
+        if (!combinationCards.isEmpty()) {
+            CombinationEnum combination = CombinationEnum.FOUR_OF_A_KIND;
+            combination.setCardsFromCombination(combinationCards);
+            combination.setKicker(cards, combinationCards);
+            return combination;
+        }
+        return null;
     }
 
-    private List<Card> getFullHouse(List<Card> cards) {
-        List<Card> result = getThreeOfAKind(cards);
-        result.addAll(getOnePairs(cards));
-        return result.size() == 5 ? result : new ArrayList<>();
+    private CombinationEnum getFullHouse(List<Card> cards) {
+
+        CombinationEnum betweenCombination = getThreeOfAKind(cards);
+        List<Card> combinationCards = new ArrayList<>();
+        if (betweenCombination != null) {
+            combinationCards = betweenCombination.getCardsFromCombination();
+            betweenCombination = getOnePairs(cards);
+            if (betweenCombination != null) {
+                combinationCards.addAll(betweenCombination.getCardsFromCombination());
+            }
+        }
+
+        if (combinationCards.size() == 5) {
+            CombinationEnum combination = CombinationEnum.FULL_HOUSE;
+            combination.setCardsFromCombination(combinationCards);
+            combination.setKicker(cards, combinationCards);
+            return combination;
+        }
+        return null;
     }
 
-    private List<Card> getFlush(List<Card> cards) {
+    private CombinationEnum getFlush(List<Card> cards) {
+
         Map<SuitCardEnum, Integer> quantity = new HashMap<>();
         for (Card card : cards) {
             SuitCardEnum value = card.getSuitCard();
@@ -126,69 +155,99 @@ public class Combination {
         }
 
         if (suitCardEnum != null) {
-            List<Card> flushCards = new ArrayList<>();
-            for (Card card : cards) {
-                if (card.getSuitCard().equals(suitCardEnum)) {
-                    flushCards.add(card);
+            cards.sort(Comparator.comparingInt(card -> card.getValueCard().getValue()));
+            List<Card> cardsCombination = new ArrayList<>();
+            for (int i = cards.size() - 1; i >= 0; i--) {
+                if (cardsCombination.size() != 5 && cards.get(i).getSuitCard().equals(suitCardEnum)) {
+                    cardsCombination.add(cards.get(i));
                 }
             }
-            return flushCards;
+            CombinationEnum combination = CombinationEnum.FLUSH;
+            combination.setCardsFromCombination(cardsCombination);
+            combination.setKicker(cards, cardsCombination);
+            return combination;
         }
-        return new ArrayList<>();
+        return null;
     }
 
-    private List<Card> getStraight(List<Card> cards) {
+    private CombinationEnum getStraight(List<Card> cards) {
+
         cards.sort(Comparator.comparingInt(x -> x.getValueCard().getValue()));
-        int count = 1;
-        int prevCard = cards.get(0).getValueCard().getValue();
+        int prevCard = cards.get(cards.size() - 1).getValueCard().getValue();
         Card card;
-        List<Card> result = new ArrayList<>(Collections.singletonList(cards.get(0)));
-        for (int i = 1; i < cards.size(); i++) {
+        List<Card> cardsCombination = new ArrayList<>(Collections.singletonList(cards.get(cards.size() - 1)));
+        for (int i = cards.size() - 2; i >= 0; i--) {
             card = cards.get(i);
-            if (card.getValueCard().getValue() - prevCard == 1) {
-                count++;
-            } else {
-                count = 1;
-                result.clear();
+            if (prevCard - card.getValueCard().getValue() != 0) {
+                if (prevCard - card.getValueCard().getValue() != 1) {
+                    cardsCombination.clear();
+                }
+                cardsCombination.add(card);
+                if (cardsCombination.size() == 5) {
+                    break;
+                }
+                prevCard = card.getValueCard().getValue();
             }
-            result.add(card);
-            if (count >= 5) {
-                return result;
-            }
-            prevCard = card.getValueCard().getValue();
         }
-        return new ArrayList<>();
+
+        if (cardsCombination.size() == 5) {
+            CombinationEnum combination = CombinationEnum.STRAIGHT;
+            combination.setCardsFromCombination(cardsCombination);
+            combination.setKicker(cards, cardsCombination);
+            return combination;
+        }
+
+        return null;
     }
 
-    private List<Card> getThreeOfAKind(List<Card> cards) {
+    private CombinationEnum getThreeOfAKind(List<Card> cards) {
+
         Map<ValueCardEnum, Integer> quantity = getQuantity(cards);
-        return getCombinationCards(cards, quantity, 3);
+        List<Card> combinationCards = getCombinationCards(cards, quantity, 3);
+        if (!combinationCards.isEmpty()) {
+            CombinationEnum result = CombinationEnum.THREE_OF_A_KIND;
+            result.setCardsFromCombination(combinationCards);
+            result.setKicker(cards, combinationCards);
+            return result;
+        }
+        return null;
     }
 
-    private List<Card> getTwoPairs(List<Card> cards) {
+    private CombinationEnum getTwoPairs(List<Card> cards) {
+
         Map<ValueCardEnum, Integer> quantity = getQuantity(cards);
-        List<Card> result = getCombinationCards(cards, quantity, 2);
-        return result.size() == 4 ? result : new ArrayList<>();
+        List<Card> combinationCards = getCombinationCards(cards, quantity, 2);
+        if (combinationCards.size() == 4) {
+            CombinationEnum result = CombinationEnum.TWO_PAIRS;
+            result.setCardsFromCombination(combinationCards);
+            result.setKicker(cards, combinationCards);
+            return result;
+        }
+        return null;
     }
 
-    private List<Card> getOnePairs(List<Card> cards) {
+    private CombinationEnum getOnePairs(List<Card> cards) {
 
         Map<ValueCardEnum, Integer> quantity = getQuantity(cards);
-        return getCombinationCards(cards, quantity, 2);
+        List<Card> combinationCards = getCombinationCards(cards, quantity, 2);
+        if (!combinationCards.isEmpty()) {
+            CombinationEnum onePair = CombinationEnum.ONE_PAIR;
+            onePair.setCardsFromCombination(combinationCards);
+            onePair.setKicker(cards, combinationCards);
+            return onePair;
+        }
+        return null;
     }
 
     private Card getHighCard(List<Card> cards) {
-        Card maxValue = cards.get(0);
-        for (int i = 1; i < cards.size(); i++) {
-            if (cards.get(i).getValueCard().getValue() > maxValue.getValueCard().getValue()) {
-                maxValue = cards.get(i);
-            }
-        }
-        return maxValue;
+
+        cards.sort(Comparator.comparingInt(card -> card.getValueCard().getValue()));
+        return cards.get(cards.size() - 1);
     }
 
 
     private Map<ValueCardEnum, Integer> getQuantity(List<Card> cards) {
+
         Map<ValueCardEnum, Integer> quantity = new HashMap<>();
 
         ValueCardEnum value;
@@ -204,11 +263,12 @@ public class Combination {
     }
 
     private List<Card> getCombinationCards(List<Card> cards, Map<ValueCardEnum, Integer> quantity, Integer needQuantity) {
+
         List<Card> result = new ArrayList<>();
         for (Map.Entry<ValueCardEnum, Integer> cardMap : quantity.entrySet()) {
             if (cardMap.getValue().equals(needQuantity)) {
                 result.addAll(
-                        cards.stream()
+                        cards.parallelStream()
                                 .filter(card -> card.getValueCard().equals(cardMap.getKey()))
                                 .collect(Collectors.toList())
                 );
@@ -216,5 +276,4 @@ public class Combination {
         }
         return result;
     }
-
 }

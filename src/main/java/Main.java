@@ -1,33 +1,37 @@
+import action.Result;
 import models.Player;
 import models.Table;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Main {
 
     public static void main(String[] args) {
-        Player player1 = new Player("Player1");
-        Player player2 = new Player("Player2");
-        Player player3 = new Player("Player3");
+        List<Player> players = new ArrayList<>();
+        players.add(new Player("Player1"));
+        players.add(new Player("Player2"));
+        players.add(new Player("Player3"));
         Table table = new Table();
         table.addCard();
         table.addCard();
-        player1.setCombination(table.getCards());
-        player2.setCombination(table.getCards());
-        player3.setCombination(table.getCards());
+
+        players = players.stream()
+                .peek(player -> player.setCombination(table.getCards()))
+                .sorted(Comparator.comparingInt(player -> player.getCombination().getValue()))
+                .collect(Collectors.toList());
         System.out.println(table.getCards().toString());
         System.out.println("\n\n");
-        System.out.println(player1.getCards().toString());
-        System.out.println(player1.getCombination().getName());
-        System.out.println(player1.getCombination().getMaxValueCard());
-        System.out.println("\n\n");
-        System.out.println(player2.getCards().toString());
-        System.out.println(player2.getCombination().getName());
-        System.out.println(player2.getCombination().getMaxValueCard());
-        System.out.println("\n\n");
-        System.out.println(player3.getCards().toString());
-        System.out.println(player3.getCombination().getName());
-        System.out.println(player3.getCombination().getMaxValueCard());
+        players.forEach(player -> {
+            System.out.println(player.getName());
+            System.out.println(player.getCards().toString());
+            System.out.println(player.getCombination().getName());
+            System.out.println("\n\n");
+        });
 
+        List<Player> winners = Result.getWinner(players);
+        winners.forEach(winner -> System.out.println(winner.getName() + " win"));
     }
-
-
 }
