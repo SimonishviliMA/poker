@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class Combination {
 
-    public CombinationEnum getCombination(List<Card> cards) {
+    public static CombinationEnum getCombination(List<Card> cards) {
 
         CombinationEnum combination = getRoyalFlush(cards);
         if (combination != null) {
@@ -66,7 +66,7 @@ public class Combination {
 
     }
 
-    private CombinationEnum getRoyalFlush(List<Card> cards) {
+    private static CombinationEnum getRoyalFlush(List<Card> cards) {
 
         CombinationEnum betweenCombination = getStraightFlush(cards);
         if (betweenCombination != null) {
@@ -81,7 +81,7 @@ public class Combination {
         return null;
     }
 
-    private CombinationEnum getStraightFlush(List<Card> cards) {
+    private static CombinationEnum getStraightFlush(List<Card> cards) {
 
         CombinationEnum betweenCombination = getFlush(cards);
         if (betweenCombination != null) {
@@ -99,7 +99,7 @@ public class Combination {
         return null;
     }
 
-    private CombinationEnum getFourOfAKind(List<Card> cards) {
+    private static CombinationEnum getFourOfAKind(List<Card> cards) {
 
         Map<ValueCardEnum, Integer> quantity = getQuantity(cards);
         List<Card> combinationCards = getCombinationCards(cards, quantity, 4);
@@ -112,7 +112,7 @@ public class Combination {
         return null;
     }
 
-    private CombinationEnum getFullHouse(List<Card> cards) {
+    private static CombinationEnum getFullHouse(List<Card> cards) {
 
         CombinationEnum betweenCombination = getThreeOfAKind(cards);
         List<Card> combinationCards = new ArrayList<>();
@@ -133,7 +133,7 @@ public class Combination {
         return null;
     }
 
-    private CombinationEnum getFlush(List<Card> cards) {
+    private static CombinationEnum getFlush(List<Card> cards) {
 
         Map<SuitCardEnum, Integer> quantity = new HashMap<>();
         for (Card card : cards) {
@@ -170,7 +170,7 @@ public class Combination {
         return null;
     }
 
-    private CombinationEnum getStraight(List<Card> cards) {
+    private static CombinationEnum getStraight(List<Card> cards) {
 
         cards.sort(Comparator.comparingInt(x -> x.getValueCard().getValue()));
         int prevCard = cards.get(cards.size() - 1).getValueCard().getValue();
@@ -200,7 +200,7 @@ public class Combination {
         return null;
     }
 
-    private CombinationEnum getThreeOfAKind(List<Card> cards) {
+    private static CombinationEnum getThreeOfAKind(List<Card> cards) {
 
         Map<ValueCardEnum, Integer> quantity = getQuantity(cards);
         List<Card> combinationCards = getCombinationCards(cards, quantity, 3);
@@ -213,7 +213,7 @@ public class Combination {
         return null;
     }
 
-    private CombinationEnum getTwoPairs(List<Card> cards) {
+    private static CombinationEnum getTwoPairs(List<Card> cards) {
 
         Map<ValueCardEnum, Integer> quantity = getQuantity(cards);
         List<Card> combinationCards = getCombinationCards(cards, quantity, 2);
@@ -226,7 +226,7 @@ public class Combination {
         return null;
     }
 
-    private CombinationEnum getOnePairs(List<Card> cards) {
+    private static CombinationEnum getOnePairs(List<Card> cards) {
 
         Map<ValueCardEnum, Integer> quantity = getQuantity(cards);
         List<Card> combinationCards = getCombinationCards(cards, quantity, 2);
@@ -239,14 +239,14 @@ public class Combination {
         return null;
     }
 
-    private Card getHighCard(List<Card> cards) {
+    private static Card getHighCard(List<Card> cards) {
 
         cards.sort(Comparator.comparingInt(card -> card.getValueCard().getValue()));
         return cards.get(cards.size() - 1);
     }
 
 
-    private Map<ValueCardEnum, Integer> getQuantity(List<Card> cards) {
+    private static Map<ValueCardEnum, Integer> getQuantity(List<Card> cards) {
 
         Map<ValueCardEnum, Integer> quantity = new HashMap<>();
 
@@ -262,7 +262,7 @@ public class Combination {
         return quantity;
     }
 
-    private List<Card> getCombinationCards(List<Card> cards, Map<ValueCardEnum, Integer> quantity, Integer needQuantity) {
+    private static List<Card> getCombinationCards(List<Card> cards, Map<ValueCardEnum, Integer> quantity, Integer needQuantity) {
 
         List<Card> result = new ArrayList<>();
         for (Map.Entry<ValueCardEnum, Integer> cardMap : quantity.entrySet()) {

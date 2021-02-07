@@ -41,8 +41,7 @@ public class Player implements Comparable<Player>{
     public void setCombination(List<Card> tableCard) {
         List<Card> cards = new ArrayList<>(tableCard);
         cards.addAll(getCards());
-        Combination combination = new Combination();
-        this.combination = combination.getCombination(cards);
+        this.combination = Combination.getCombination(cards);
     }
 
     public CombinationEnum getCombination() {

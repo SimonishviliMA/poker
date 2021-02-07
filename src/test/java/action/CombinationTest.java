@@ -23,8 +23,7 @@ public class CombinationTest {
         Card card6 = new Card(SuitCardEnum.SPADES, ValueCardEnum.THREE);
         Card card7 = new Card(SuitCardEnum.SPADES, ValueCardEnum.QUEEN);
         List<Card> cards = Arrays.asList(card1, card4, card3, card5, card2, card6, card7);
-        Combination combination = new Combination();
-        CombinationEnum result = combination.getCombination(cards);
+        CombinationEnum result = Combination.getCombination(cards);
         assertEquals(CombinationEnum.HIGH_CARD, result);
         //assertEquals(ValueCardEnum.ACE, result.getMaxValueCardCombination());
     }
@@ -39,8 +38,7 @@ public class CombinationTest {
         Card card6 = new Card(SuitCardEnum.SPADES, ValueCardEnum.THREE);
         Card card7 = new Card(SuitCardEnum.SPADES, ValueCardEnum.QUEEN);
         List<Card> cards = Arrays.asList(card1, card4, card3, card5, card2, card6, card7);
-        Combination combination = new Combination();
-        CombinationEnum result = combination.getCombination(cards);
+        CombinationEnum result = Combination.getCombination(cards);
         assertEquals(CombinationEnum.ONE_PAIR, result);
         //assertEquals(ValueCardEnum.TWO, result.getMaxValueCardCombination());
     }
@@ -55,8 +53,7 @@ public class CombinationTest {
         Card card6 = new Card(SuitCardEnum.SPADES, ValueCardEnum.THREE);
         Card card7 = new Card(SuitCardEnum.SPADES, ValueCardEnum.QUEEN);
         List<Card> cards = Arrays.asList(card1, card4, card3, card5, card2, card6, card7);
-        Combination combination = new Combination();
-        CombinationEnum result = combination.getCombination(cards);
+        CombinationEnum result = Combination.getCombination(cards);
         List<Card> cardsFromCombination = result.getCardsFromCombination();
 
         assertEquals(CombinationEnum.TWO_PAIRS, result);
@@ -77,8 +74,7 @@ public class CombinationTest {
         Card card6 = new Card(SuitCardEnum.SPADES, ValueCardEnum.THREE);
         Card card7 = new Card(SuitCardEnum.SPADES, ValueCardEnum.QUEEN);
         List<Card> cards = Arrays.asList(card1, card4, card3, card5, card2, card6, card7);
-        Combination combination = new Combination();
-        CombinationEnum result = combination.getCombination(cards);
+        CombinationEnum result = Combination.getCombination(cards);
         assertEquals(CombinationEnum.THREE_OF_A_KIND, result);
         //assertEquals(ValueCardEnum.TWO, result.getMaxValueCardCombination());
     }
@@ -94,8 +90,7 @@ public class CombinationTest {
         Card card6 = new Card(SuitCardEnum.SPADES, ValueCardEnum.THREE);
         Card card7 = new Card(SuitCardEnum.SPADES, ValueCardEnum.QUEEN);
         List<Card> cards = Arrays.asList(card1, card4, card3, card5, card2, card6, card7);
-        Combination combination = new Combination();
-        CombinationEnum result = combination.getCombination(cards);
+        CombinationEnum result = Combination.getCombination(cards);
         List<Card> cardsFromCombination = result.getCardsFromCombination();
         assertEquals(CombinationEnum.STRAIGHT, result);
         //assertEquals(ValueCardEnum.SIX, result.getMaxValueCardCombination());
@@ -118,8 +113,7 @@ public class CombinationTest {
         Card card6 = new Card(SuitCardEnum.SPADES, ValueCardEnum.THREE);
         Card card7 = new Card(SuitCardEnum.SPADES, ValueCardEnum.QUEEN);
         List<Card> cards = Arrays.asList(card1, card4, card3, card5, card2, card6, card7);
-        Combination combination = new Combination();
-        CombinationEnum result = combination.getCombination(cards);
+        CombinationEnum result = Combination.getCombination(cards);
         assertEquals(CombinationEnum.FLUSH, result);
         //assertEquals(ValueCardEnum.SIX, result.getMaxValueCardCombination());
     }
@@ -134,8 +128,7 @@ public class CombinationTest {
         Card card6 = new Card(SuitCardEnum.SPADES, ValueCardEnum.FIVE);
         Card card7 = new Card(SuitCardEnum.SPADES, ValueCardEnum.QUEEN);
         List<Card> cards = Arrays.asList(card1, card4, card3, card5, card2, card6, card7);
-        Combination combination = new Combination();
-        CombinationEnum result = combination.getCombination(cards);
+        CombinationEnum result = Combination.getCombination(cards);
         assertEquals(CombinationEnum.FULL_HOUSE, result);
         //assertEquals(ValueCardEnum.THREE, result.getMaxValueCardCombination());
     }
@@ -150,8 +143,7 @@ public class CombinationTest {
         Card card6 = new Card(SuitCardEnum.SPADES, ValueCardEnum.THREE);
         Card card7 = new Card(SuitCardEnum.SPADES, ValueCardEnum.QUEEN);
         List<Card> cards = Arrays.asList(card1, card4, card3, card5, card2, card6, card7);
-        Combination combination = new Combination();
-        CombinationEnum result = combination.getCombination(cards);
+        CombinationEnum result = Combination.getCombination(cards);
         assertEquals(CombinationEnum.FOUR_OF_A_KIND, result);
         //assertEquals(ValueCardEnum.TWO, result.getMaxValueCardCombination());
     }
@@ -166,15 +158,14 @@ public class CombinationTest {
         Card card6 = new Card(SuitCardEnum.DIAMONDS, ValueCardEnum.SEVEN);
         Card card7 = new Card(SuitCardEnum.DIAMONDS, ValueCardEnum.EIGHT);
         List<Card> cards1 = Arrays.asList(card1, card4, card3, card5, card2, card6, card7);
-        Combination combination = new Combination();
-        CombinationEnum result = combination.getCombination(cards1);
+        CombinationEnum result = Combination.getCombination(cards1);
         assertEquals(CombinationEnum.STRAIGHT_FLUSH, result);
         //assertEquals(ValueCardEnum.EIGHT, result.getMaxValueCardCombination());
 
         Card card8 = new Card(SuitCardEnum.CLUBS, ValueCardEnum.SEVEN);
         Card card9 = new Card(SuitCardEnum.CLUBS, ValueCardEnum.EIGHT);
         List<Card> cards2 = Arrays.asList(card3, card4, card5, card8, card9);
-        CombinationEnum wrongResult = combination.getCombination(cards2);
+        CombinationEnum wrongResult = Combination.getCombination(cards2);
         assertNotEquals(CombinationEnum.STRAIGHT_FLUSH, wrongResult);
     }
 
@@ -188,8 +179,7 @@ public class CombinationTest {
         Card card6 = new Card(SuitCardEnum.SPADES, ValueCardEnum.FIVE);
         Card card7 = new Card(SuitCardEnum.SPADES, ValueCardEnum.SIX);
         List<Card> cards = Arrays.asList(card1, card4, card3, card5, card2, card6, card7);
-        Combination combination = new Combination();
-        CombinationEnum result = combination.getCombination(cards);
+        CombinationEnum result = Combination.getCombination(cards);
         assertEquals(CombinationEnum.ROYAL_FLUSH, result);
         //assertEquals(ValueCardEnum.ACE, result.getMaxValueCardCombination());
     }
